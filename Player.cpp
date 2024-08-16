@@ -49,39 +49,39 @@ void Player::PlayerMovement() { MovementInput(); }
 
 void Player::MovementInput() {
 	// LR Movement
-		if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
-			Vector3 acceleration = {};
-			if (Input::GetInstance()->PushKey(DIK_D)) {
-				if (lrDirection_ != LRDirection::kRight) { // player direction
-					lrDirection_ = LRDirection::kRight;
-					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = kTimeTurn;
-				}
-
-				if (velocity_.x < 0.0f) { // when pushing opposing input, attenuate velocity
-					velocity_.x *= (1.0f - kAttenuation);
-				}
-				acceleration.x += kAcceleration;
-			} else if (Input::GetInstance()->PushKey(DIK_A)) {
-				if (lrDirection_ != LRDirection::kLeft) { // player direction
-					lrDirection_ = LRDirection::kLeft;
-					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = kTimeTurn;
-				}
-
-				if (velocity_.x > 0.0f) { // when pushing opposing input, attenuate velocity
-					velocity_.x *= (1.0f - kAttenuation);
-				}
-				acceleration.x -= kAcceleration;
+	if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
+		Vector3 acceleration = {};
+		if (Input::GetInstance()->PushKey(DIK_D)) {
+			if (lrDirection_ != LRDirection::kRight) { // player direction
+				lrDirection_ = LRDirection::kRight;
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = kTimeTurn;
 			}
-			velocity_.x = velocity_.x + acceleration.x;
-			velocity_.x = std::clamp(velocity_.x, -kMaxVelocity, kMaxVelocity);
-		} else {
-			velocity_.x *= (1.0f - kAttenuation);
-			if (fabsf(velocity_.x) < 0.05f) {
-				velocity_.x = 0;
+
+			if (velocity_.x < 0.0f) { // when pushing opposing input, attenuate velocity
+				velocity_.x *= (1.0f - kAttenuation);
 			}
+			acceleration.x += kAcceleration;
+		} else if (Input::GetInstance()->PushKey(DIK_A)) {
+			if (lrDirection_ != LRDirection::kLeft) { // player direction
+				lrDirection_ = LRDirection::kLeft;
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = kTimeTurn;
+			}
+
+			if (velocity_.x > 0.0f) { // when pushing opposing input, attenuate velocity
+				velocity_.x *= (1.0f - kAttenuation);
+			}
+			acceleration.x -= kAcceleration;
 		}
+		velocity_.x = velocity_.x + acceleration.x;
+		velocity_.x = std::clamp(velocity_.x, -kMaxVelocity, kMaxVelocity);
+	} else {
+		velocity_.x *= (1.0f - kAttenuation);
+		if (fabsf(velocity_.x) < 0.05f) {
+			velocity_.x = 0;
+		}
+	}
 	// Jump
 	bool isLand = false;
 	if (onGround_) {
