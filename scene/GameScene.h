@@ -15,6 +15,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Goal.h"
 #include <vector>
 
 const int kWindowWidth = 1280;
@@ -117,6 +118,11 @@ private: // メンバ変数
 
 	static inline const int32_t kEnemyNum = 3;
 	std::list<Enemy*> enemies_;
+
+	// Goal
+	/*Goal* goal_ = */ 
+	std::unique_ptr<Goal> goal_;
+	Model* goalModel_ = nullptr; 
 
 	// Camera
 	CameraController* cameraController_ = nullptr;

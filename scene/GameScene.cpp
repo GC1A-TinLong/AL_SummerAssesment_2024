@@ -23,6 +23,7 @@ GameScene::~GameScene() {
 	delete enemy_;
 	delete enemyModel_;
 	delete cameraController_;
+	delete goalModel_;
 
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
@@ -80,7 +81,6 @@ void GameScene::Initialize() {
 	// Enemy
 	enemy_ = new Enemy;
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
-
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12 + (i * 2), 18 - (i * 2));
@@ -88,6 +88,11 @@ void GameScene::Initialize() {
 
 		enemies_.push_back(newEnemy);
 	}
+	// Goal
+	goal_ = std::make_unique<Goal>();
+	goalModel_ = Model::CreateFromOBJ("goal", true);
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	goal_->Initialize(goalModel_, &viewProjection_, goalPosition);
 	// Camera
 	cameraController_ = new CameraController;
 	cameraController_->Initialize(&viewProjection_, cameraMovableArea);
@@ -150,6 +155,10 @@ void GameScene::Draw() {
 		for (Enemy* enemy : enemies_) {
 			enemy->Draw();
 		}
+	}
+
+	if (goal_) {
+		goal_->Draw();
 	}
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -262,11 +271,13 @@ void GameScene::CurrentPhase() {
 	case Phase::kPlay:
 		skydome_->Update(); // skydome update
 		player_->Update();  // player update
-		if (enemy_) {       //	enemy update
+		if (enemy_) {       // enemy update
 			for (Enemy* enemy : enemies_) {
 				enemy->Update();
 			}
 		}
+		// goal
+		goal_->Update();
 		// camera update
 		cameraController_->Update();
 		// block update
@@ -310,6 +321,8 @@ void GameScene::CurrentPhase() {
 		if (deathParticles_) { // death particles update
 			deathParticles_->Update();
 		}
+		// goal
+		goal_->Update();
 		// camera update
 		cameraController_->Update();
 		// block update

@@ -9,7 +9,6 @@ Player::~Player() {}
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, CameraController::Rect movableArea) {
 	assert(model);
 	model_ = model;
-	// textureHandle_ = textureHandle;
 	viewProjection_ = viewProjection;
 	movableArea_ = movableArea;
 

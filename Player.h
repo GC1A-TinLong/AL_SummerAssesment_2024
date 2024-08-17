@@ -79,12 +79,12 @@ private:
 	static inline const float kHeight = 1.8f;
 	// Airborne
 	static inline const float kGravityAcceleration = 0.07f;
-	static inline const float kLimitFallSpeed = 1.2f;
-	static inline const float kJumpAcceleration = 1.2f;
+	static inline const float kLimitFallSpeed = 1.8f;
+	static inline const float kJumpAcceleration = 1.1f;
 	// OnGround
-	static inline const float kAcceleration = 0.03f;
+	static inline const float kAcceleration = 0.015f;
 	static inline const float kAttenuation = 0.15f;
-	static inline const float kMaxVelocity = 1.0f;
+	static inline const float kMaxVelocity = 0.6f;
 	bool onGround_ = true;
 	// MapChip Adjustment
 	static inline const float kBlank = 1.0f;
