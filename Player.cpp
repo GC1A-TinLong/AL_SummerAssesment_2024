@@ -44,7 +44,11 @@ void Player::Update() {
 #endif // _DEBUG
 }
 
-void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+void Player::Draw() {
+	if (drawCount < 10) {
+		model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
+	}
+}
 
 void Player::PlayerMovement() { MovementInput(); }
 
@@ -201,10 +205,15 @@ void Player::OnCollision(const Enemy* enemy) {
 void Player::CollisionBuffer() {
 	if (isHit) {
 		collideBuffer++;
+		drawCount++;
+		if (drawCount >= 20) {
+			drawCount = 0;
+		}
 	}
 	if (collideBuffer >= 100) {
 		isHit = false;
 		collideBuffer = 0;
+		drawCount = 0;
 	}
 }
 

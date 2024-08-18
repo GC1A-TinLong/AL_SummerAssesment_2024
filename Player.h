@@ -2,7 +2,6 @@
 
 #define NOMINMAX
 #include "CameraController.h"
-#include "DeathParticles.h"
 #include "MathFunction.h"
 #include "Input.h"
 #include "Model.h"
@@ -102,6 +101,7 @@ private:
 	// Collide with enemy
 	int hp = 5;
 	int collideBuffer = 0;
+	int drawCount = 0;
 	bool isHit = false;
 	bool isDead_ = false;
 
@@ -109,8 +109,6 @@ private:
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
-
-	DeathParticles* deathParticles_;
 
 	Vector3 velocity_ = {};
 	CameraController::Rect movableArea_ = {};
