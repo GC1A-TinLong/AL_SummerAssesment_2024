@@ -83,7 +83,7 @@ void GameScene::Initialize() {
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12 + (i * 2), 18 - (i * 2));
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(25 + (i * 2), 18 - (i * 2));
 		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 
 		enemies_.push_back(newEnemy);
@@ -232,6 +232,7 @@ void GameScene::CheckAllCollisions() {
 			enemy->OnCollision(player_);
 		}
 	}
+	player_->CollisionBuffer();
 
 #pragma endregion
 

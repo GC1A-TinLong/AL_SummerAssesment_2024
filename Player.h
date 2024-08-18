@@ -58,6 +58,7 @@ public:
 
 	// Collision
 	void OnCollision(const Enemy* enemy);
+	void CollisionBuffer();
 
 	// Getter
 	const WorldTransform& GetWorldTransform() { return worldTransform_; };
@@ -98,7 +99,10 @@ private:
 	float turnFirstRotationY_ = 0.0f;
 	float turnTimer_ = 0;
 	static inline const float kTimeTurn = 0.3f;
-
+	// Collide with enemy
+	int hp = 5;
+	int collideBuffer = 0;
+	bool isHit = false;
 	bool isDead_ = false;
 
 	WorldTransform worldTransform_;

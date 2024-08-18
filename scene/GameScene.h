@@ -53,6 +53,7 @@ public: // メンバ関数
 	void Draw();
 
 	void GenerateBlocks();
+
 	/// <summary>
 	/// Check all collisions
 	/// </summary>
@@ -103,7 +104,7 @@ private: // メンバ変数
 	// Player
 	Player* player_ = nullptr;
 	uint32_t playerTexture_ = 0;
-	CameraController::Rect playerMovableArea = {2.0f, 115.5f, 2.0f, 100.0f};
+	CameraController::Rect playerMovableArea = {2.5f, 55.4f, 2.0f, 100.0f};
 	Model* playerModel_ = nullptr;
 	bool isPlayerHit = false;
 
@@ -116,7 +117,7 @@ private: // メンバ変数
 	Model* enemyModel_ = nullptr;
 	uint32_t enemyTexture_ = 0u;
 
-	static inline const int32_t kEnemyNum = 3;
+	static inline const int32_t kEnemyNum = 1;
 	std::list<Enemy*> enemies_;
 
 	// Goal
@@ -126,5 +127,5 @@ private: // メンバ変数
 
 	// Camera
 	CameraController* cameraController_ = nullptr;
-	CameraController::Rect cameraMovableArea = {27.8f, 172.0f, 15.2f, 100.0f};
+	CameraController::Rect cameraMovableArea = {29.f, 29.f, 15.5f, 100.0f};
 };

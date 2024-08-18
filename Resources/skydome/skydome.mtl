@@ -1,4 +1,4 @@
-# Blender 4.1.1 MTL File: '天球.blend'
+# Blender 4.1.1 MTL File: 'None'
 # www.blender.org
 
 newmtl マテリアル.001
@@ -8,5 +8,5 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
-illum 2
-map_Kd C:/For_Lessons_AL/AL3_02_2DAction/DirectXGame/Resources/uvChecker.png
+illum 1
+map_Kd C:/Users/tinlo/Desktop/工学院/RS2/assesment2/RS2_REAL/Resources/skydome/skydome.png
