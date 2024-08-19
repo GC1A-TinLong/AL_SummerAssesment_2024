@@ -99,8 +99,8 @@ private:
 	float turnTimer_ = 0;
 	static inline const float kTimeTurn = 0.3f;
 	// Collide with enemy
-	int hp = 5;
-	int collideBuffer = 0;
+	uint8_t hp = 5;
+	uint8_t collideBuffer = 0;
 	static inline const int kMaxDrawCount = 30;
 	int drawCount = 0;
 	bool isHit = false;

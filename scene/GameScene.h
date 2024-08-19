@@ -1,26 +1,31 @@
 #pragma once
 #include "Audio.h"
 #include "CameraController.h"
+#include "DangerSign.h"
 #include "DeathParticles.h"
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Enemy.h"
 #include "Fade.h"
-#include "MathFunction.h"
+#include "Goal.h"
 #include "Input.h"
 #include "MapChipField.h"
+#include "MathFunction.h"
 #include "Model.h"
 #include "Player.h"
 #include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "Goal.h"
-#include "DangerSign.h"
+#include <random>
 #include <vector>
 
 const int kWindowWidth = 1280;
 const int kWindowHeight = 720;
+
+//std::random_device seed; // random device
+//std::default_random_engine eng(seed());
+//std::uniform_int_distribution<int> randOutput(0, 3);
 
 /// <summary>
 /// ゲームシーン
@@ -113,6 +118,9 @@ private: // メンバ変数
 	DeathParticles* deathParticles_ = nullptr;
 	Model* deathParticlesModel_ = nullptr;
 
+	// Spawn
+	Vector2 spawnPosition{};
+
 	// Enemy
 	Enemy* enemy_ = nullptr;
 	Model* enemyModel_ = nullptr;
@@ -126,7 +134,7 @@ private: // メンバ変数
 
 	// Goal
 	std::unique_ptr<Goal> goal_ = std::make_unique<Goal>();
-	Model* goalModel_ = nullptr; 
+	Model* goalModel_ = nullptr;
 
 	// Camera
 	CameraController* cameraController_ = nullptr;

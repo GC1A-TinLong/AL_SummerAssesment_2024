@@ -93,8 +93,8 @@ void GameScene::Initialize() {
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	goal_->Initialize(goalModel_, &viewProjection_, goalPosition);
 	// DangerSign
-	Vector2 dangerPosition = {1180, 610};
-	dangerSign_->Initialize(&viewProjection_, dangerPosition);
+	spawnPosition = dangerSign_->SpawnPoint();
+	dangerSign_->Initialize(&viewProjection_, spawnPosition);
 	// Camera
 	cameraController_ = new CameraController;
 	cameraController_->Initialize(&viewProjection_, cameraMovableArea);

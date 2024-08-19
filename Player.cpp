@@ -38,8 +38,7 @@ void Player::Update() {
 	ImGui::InputFloat3("Velocity", &velocity_.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("Translation", &worldTransform_.translation_.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("info.velocity", &collisionMapInfo.velocity.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputInt("HP", &hp, ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputInt("buffer", &collideBuffer, ImGuiInputTextFlags_ReadOnly);
+	//ImGui::InputInt("HP", &hp, ImGuiInputTextFlags_ReadOnly);
 	ImGui::End();
 #endif // _DEBUG
 }
