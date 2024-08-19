@@ -16,6 +16,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Goal.h"
+#include "DangerSign.h"
 #include <vector>
 
 const int kWindowWidth = 1280;
@@ -120,9 +121,11 @@ private: // メンバ変数
 	static inline const int32_t kEnemyNum = 1;
 	std::list<Enemy*> enemies_;
 
+	// DangerSign
+	std::unique_ptr<DangerSign> dangerSign_ = std::make_unique<DangerSign>();
+
 	// Goal
-	/*Goal* goal_ = */ 
-	std::unique_ptr<Goal> goal_;
+	std::unique_ptr<Goal> goal_ = std::make_unique<Goal>();
 	Model* goalModel_ = nullptr; 
 
 	// Camera

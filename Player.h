@@ -101,6 +101,7 @@ private:
 	// Collide with enemy
 	int hp = 5;
 	int collideBuffer = 0;
+	static inline const int kMaxDrawCount = 30;
 	int drawCount = 0;
 	bool isHit = false;
 	bool isDead_ = false;

@@ -45,7 +45,10 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	if (drawCount < 10) {
+	if (!isHit) {
+		model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
+	}
+	if (isHit && drawCount >= 10) {
 		model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
 	}
 }
@@ -206,7 +209,7 @@ void Player::CollisionBuffer() {
 	if (isHit) {
 		collideBuffer++;
 		drawCount++;
-		if (drawCount >= 20) {
+		if (drawCount >= kMaxDrawCount) {
 			drawCount = 0;
 		}
 	}

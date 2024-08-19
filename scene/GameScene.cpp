@@ -89,10 +89,12 @@ void GameScene::Initialize() {
 		enemies_.push_back(newEnemy);
 	}
 	// Goal
-	goal_ = std::make_unique<Goal>();
 	goalModel_ = Model::CreateFromOBJ("goal", true);
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	goal_->Initialize(goalModel_, &viewProjection_, goalPosition);
+	// DangerSign
+	Vector2 dangerPosition = {1180, 610};
+	dangerSign_->Initialize(&viewProjection_, dangerPosition);
 	// Camera
 	cameraController_ = new CameraController;
 	cameraController_->Initialize(&viewProjection_, cameraMovableArea);
@@ -186,6 +188,10 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
+	if (phase_ == Phase::kPlay || phase_ == Phase::kDeath) {
+		dangerSign_->Draw();
+	}
+
 	if (fade_) {
 		fade_->Draw();
 	}
@@ -277,6 +283,8 @@ void GameScene::CurrentPhase() {
 				enemy->Update();
 			}
 		}
+		// Danger Sign
+		dangerSign_->Update();
 		// goal
 		goal_->Update();
 		// camera update
@@ -322,6 +330,8 @@ void GameScene::CurrentPhase() {
 		if (deathParticles_) { // death particles update
 			deathParticles_->Update();
 		}
+		// Danger Sign
+		dangerSign_->Update();
 		// goal
 		goal_->Update();
 		// camera update

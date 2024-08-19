@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector2.h"
 #include <Vector3.h>
 #include <cassert>
 #include <cstdint>
@@ -55,6 +56,7 @@ public:
 	/// <param name="yIndex"></param>
 	/// <returns></returns>
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+	Vector2 GetMapChipPositionByIndexVector2(uint32_t xIndex, uint32_t yIndex);
 
 	uint32_t GetNumBlockVertical() { return kNumBlockVertical; }
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
