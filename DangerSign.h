@@ -5,11 +5,6 @@
 #include "Sprite.h"
 #include "MapChipField.h"
 #include <TextureManager.h>
-#include <random>
-
-std::random_device seed; // random device
-std::default_random_engine eng(seed());
-std::uniform_int_distribution<int> randOutput(0, 3);
 
 class DangerSign {
 public:
@@ -41,8 +36,8 @@ private:
 		kSpawnPoint,
 	};
 	SpawnPos spawnPos;
-	Vector2 topLeftPos = {100, 500};
-	Vector2 botLeftPos = {100, 610};
+	Vector2 topLeftPos = {36, 500};
+	Vector2 botLeftPos = {36, 610};
 	Vector2 topRightPos = {1180, 500};
 	Vector2 botRightPos = {1180, 610};
 

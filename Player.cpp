@@ -4,7 +4,7 @@
 
 Player::Player() {}
 
-Player::~Player() {}
+Player::~Player() { delete hpModel_; }
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, CameraController::Rect movableArea) {
 	assert(model);
@@ -15,6 +15,14 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vect
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+
+	hpModel_ = Model::CreateFromOBJ("playerHP");
+	playerHP_.resize(kMaxHp);
+	for (int i = 0; i < kMaxHp; i++) {
+		Vector3 hpPosition = {1.f + (i / 2.f), 1.f, 0};
+		playerHP_[i]->Initialize(hpModel_, viewProjection, hpPosition);
+	}
+
 }
 
 void Player::Update() {

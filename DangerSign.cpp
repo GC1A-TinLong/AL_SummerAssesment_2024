@@ -1,4 +1,9 @@
 #include "DangerSign.h"
+#include <random>
+
+std::random_device seed; // random device
+std::default_random_engine eng(seed());
+std::uniform_int_distribution<int> randOutput(0, 3);
 
 DangerSign::~DangerSign() { delete sprite_; }
 

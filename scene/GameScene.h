@@ -17,15 +17,10 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include <random>
 #include <vector>
 
 const int kWindowWidth = 1280;
 const int kWindowHeight = 720;
-
-//std::random_device seed; // random device
-//std::default_random_engine eng(seed());
-//std::uniform_int_distribution<int> randOutput(0, 3);
 
 /// <summary>
 /// ゲームシーン
@@ -126,7 +121,7 @@ private: // メンバ変数
 	Model* enemyModel_ = nullptr;
 	uint32_t enemyTexture_ = 0u;
 
-	static inline const int32_t kEnemyNum = 1;
+	static inline const uint8_t kEnemyNum = 1;
 	std::list<Enemy*> enemies_;
 
 	// DangerSign

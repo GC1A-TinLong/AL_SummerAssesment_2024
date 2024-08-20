@@ -105,6 +105,11 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	CurrentPhase();
+	// DangerSign
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		spawnPosition = dangerSign_->SpawnPoint();
+		dangerSign_->Initialize(&viewProjection_, spawnPosition);
+	}
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_F)) {

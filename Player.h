@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <imgui.h>
 #include <numbers>
+#include "PlayerHPmodel.h"
 
 class MapChipField;
 class Enemy;
@@ -98,8 +99,13 @@ private:
 	float turnFirstRotationY_ = 0.0f;
 	float turnTimer_ = 0;
 	static inline const float kTimeTurn = 0.3f;
+	// Player HP icon
+	//PlayerHPmodel* hpModel_ = nullptr;
+	std::vector<PlayerHPmodel*> playerHP_;
+	Model* hpModel_ = nullptr;
 	// Collide with enemy
-	uint8_t hp = 5;
+	static inline const uint8_t kMaxHp = 5;
+	uint8_t hp = kMaxHp;
 	uint8_t collideBuffer = 0;
 	static inline const int kMaxDrawCount = 30;
 	int drawCount = 0;
