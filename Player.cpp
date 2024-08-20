@@ -4,7 +4,15 @@
 
 Player::Player() {}
 
-Player::~Player() { delete hpModel_; }
+Player::~Player() {
+	delete hpModel_;
+	for (auto* playerHP : playerHP_) {
+		delete playerHP;
+	}
+	playerHP_.clear();
+	delete deathParticles_;
+	delete deathParticlesModel_;
+}
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, CameraController::Rect movableArea) {
 	assert(model);
@@ -18,11 +26,16 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vect
 
 	hpModel_ = Model::CreateFromOBJ("playerHP");
 	playerHP_.resize(kMaxHp);
-	for (int i = 0; i < kMaxHp; i++) {
-		Vector3 hpPosition = {1.f + (i / 2.f), 1.f, 0};
+	for (uint8_t i = 0; i < kMaxHp; i++) {
+		playerHP_[i] = new PlayerHPmodel;
+		Vector3 hpPosition = mapChipField_->GetMapChipPositionByIndex(2, 4);
+		hpPosition.x += (i * 3) - 0.5f;
+		hpPosition.y -= 0.8f;
 		playerHP_[i]->Initialize(hpModel_, viewProjection, hpPosition);
 	}
 
+	deathParticles_ = new DeathParticles;
+	deathParticlesModel_ = Model::CreateFromOBJ("deathParticles", true);
 }
 
 void Player::Update() {
@@ -39,6 +52,11 @@ void Player::Update() {
 
 	PlayerDirection();
 
+	for (auto* playerHP : playerHP_) {
+		playerHP->Update();
+	}
+	DrawHpParticles();
+
 	worldTransform_.UpdateMatrix();
 
 #ifdef _DEBUG
@@ -46,17 +64,21 @@ void Player::Update() {
 	ImGui::InputFloat3("Velocity", &velocity_.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("Translation", &worldTransform_.translation_.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("info.velocity", &collisionMapInfo.velocity.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	//ImGui::InputInt("HP", &hp, ImGuiInputTextFlags_ReadOnly);
+	// ImGui::InputInt("HP", &hp, ImGuiInputTextFlags_ReadOnly);
 	ImGui::End();
 #endif // _DEBUG
 }
 
 void Player::Draw() {
-	if (!isHit) {
+	if (!isHit_) {
 		model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
 	}
-	if (isHit && drawCount >= 10) {
+	if (isHit_ && drawCount >= 10) {
 		model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
+	}
+
+	for (auto* playerHP : playerHP_) {
+		playerHP->Draw();
 	}
 }
 
@@ -203,9 +225,14 @@ void Player::WhenHitWall(const CollisionMapInfo& info) {
 
 void Player::OnCollision(const Enemy* enemy) {
 	(void)enemy;
-	isHit = true;
-	if (isHit && collideBuffer == 0) {
+	isHit_ = true;
+	if (isHit_ && collideBuffer == 0) {
 		hp--;
+
+		drawHpParticles = true; // true -> to DrawHpParticles Function
+		const Vector3& deathParticlesPosition = playerHP_[hp]->GetWorldTranslation();
+		deathParticles_->Initialize(deathParticlesModel_, viewProjection_, deathParticlesPosition);
+		playerHP_.resize(hp);
 	}
 	if (hp == 0) {
 		isDead_ = true;
@@ -213,7 +240,7 @@ void Player::OnCollision(const Enemy* enemy) {
 }
 
 void Player::CollisionBuffer() {
-	if (isHit) {
+	if (isHit_) {
 		collideBuffer++;
 		drawCount++;
 		if (drawCount >= kMaxDrawCount) {
@@ -221,9 +248,19 @@ void Player::CollisionBuffer() {
 		}
 	}
 	if (collideBuffer >= 100) {
-		isHit = false;
+		isHit_ = false;
 		collideBuffer = 0;
 		drawCount = 0;
+	}
+}
+
+void Player::DrawHpParticles() {
+	if (drawHpParticles) {
+		deathParticles_->Update();
+		deathParticles_->Draw();
+	}
+	if (deathParticles_->IsFinished()) {
+		drawHpParticles = false;
 	}
 }
 

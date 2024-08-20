@@ -12,6 +12,7 @@
 #include <imgui.h>
 #include <numbers>
 #include "PlayerHPmodel.h"
+#include "DeathParticles.h"
 
 class MapChipField;
 class Enemy;
@@ -36,12 +37,6 @@ public:
 
 	~Player();
 
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	/// <param name="model"></param>
-	/// <param name="textureHandle"></param>
-	/// <param name="viewProjection"></param>
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, CameraController::Rect movableArea);
 	void Update();
 	void Draw();
@@ -59,12 +54,15 @@ public:
 	// Collision
 	void OnCollision(const Enemy* enemy);
 	void CollisionBuffer();
+	// HP Particles
+	void DrawHpParticles();
 
 	// Getter
 	const WorldTransform& GetWorldTransform() { return worldTransform_; };
 	const Vector3& GetVelocity() const { return velocity_; };
 	const Vector3 GetWorldPosition();
 	const AABB GetAABB();
+	bool IsHit() const { return isHit_; }
 	bool IsDead() const { return isDead_; }
 	// Setter
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; };
@@ -75,6 +73,17 @@ private:
 	void IsCollideMapLeft(CollisionMapInfo& info);
 	void IsCollideMapRight(CollisionMapInfo& info);
 	void MapCollision(CollisionMapInfo& info);
+
+	WorldTransform worldTransform_;
+	Model* model_ = nullptr;
+	uint32_t textureHandle_ = 0u;
+	ViewProjection* viewProjection_ = nullptr;
+
+	Vector3 velocity_ = {};
+	CameraController::Rect movableArea_ = {};
+	LRDirection lrDirection_ = LRDirection::kRight;
+	MapChipField* mapChipField_ = nullptr;
+
 	// Player Size
 	static inline const float kWidth = 1.8f;
 	static inline const float kHeight = 1.8f;
@@ -100,25 +109,17 @@ private:
 	float turnTimer_ = 0;
 	static inline const float kTimeTurn = 0.3f;
 	// Player HP icon
-	//PlayerHPmodel* hpModel_ = nullptr;
 	std::vector<PlayerHPmodel*> playerHP_;
 	Model* hpModel_ = nullptr;
+	DeathParticles* deathParticles_ = nullptr;
+	Model* deathParticlesModel_ = nullptr;
+	bool drawHpParticles = false;
 	// Collide with enemy
 	static inline const uint8_t kMaxHp = 5;
 	uint8_t hp = kMaxHp;
 	uint8_t collideBuffer = 0;
 	static inline const int kMaxDrawCount = 30;
 	int drawCount = 0;
-	bool isHit = false;
+	bool isHit_ = false;
 	bool isDead_ = false;
-
-	WorldTransform worldTransform_;
-	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0u;
-	ViewProjection* viewProjection_ = nullptr;
-
-	Vector3 velocity_ = {};
-	CameraController::Rect movableArea_ = {};
-	LRDirection lrDirection_ = LRDirection::kRight;
-	MapChipField* mapChipField_ = nullptr;
 };

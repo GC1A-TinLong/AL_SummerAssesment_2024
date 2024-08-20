@@ -13,6 +13,8 @@ public:
 
 	void Draw();
 
+	const Vector3 GetWorldTranslation() const { return worldTransform_.translation_; }
+
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
