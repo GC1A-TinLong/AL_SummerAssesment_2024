@@ -17,6 +17,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "PlayerHPmodel.h"
 #include <vector>
 
 const int kWindowWidth = 1280;
@@ -108,6 +109,12 @@ private: // メンバ変数
 	CameraController::Rect playerMovableArea = {2.5f, 55.4f, 2.0f, 100.0f};
 	Model* playerModel_ = nullptr;
 	bool isPlayerHit = false;
+
+	// Player HP icon
+	std::vector<PlayerHPmodel*> playerHP_;
+	Model* hpModel_ = nullptr;
+	static inline const uint8_t kMaxHp = 5;
+	uint8_t hp = kMaxHp;
 
 	// Death Particles
 	DeathParticles* deathParticles_ = nullptr;

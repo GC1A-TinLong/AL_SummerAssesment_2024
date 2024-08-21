@@ -16,6 +16,11 @@ GameScene::~GameScene() {
 		delete playerModel_;
 		delete player_;
 	}
+	delete hpModel_;
+	for (auto* playerHP : playerHP_) {
+		delete playerHP;
+	}
+	playerHP_.clear();
 	if (deathParticles_) {
 		delete deathParticles_;
 		delete deathParticlesModel_;
@@ -76,8 +81,16 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
 	player_->Initialize(playerModel_, &viewProjection_, playerPosition, playerMovableArea);
 	player_->SetMapChipField(mapChipField_);
-	// Death Particles
-	// deathParticles_->Initialize(deathParticlesModel_, &viewProjection_, playerPosition);
+	// Player HP
+	hpModel_ = Model::CreateFromOBJ("playerHP");
+	playerHP_.resize(kMaxHp);
+	for (uint8_t i = 0; i < kMaxHp; i++) {
+		playerHP_[i] = new PlayerHPmodel;
+		Vector3 hpPosition = mapChipField_->GetMapChipPositionByIndex(2, 4);
+		hpPosition.x += (i * 3) - 0.5f;
+		hpPosition.y -= 0.8f;
+		playerHP_[i]->Initialize(hpModel_, &viewProjection_, hpPosition);
+	}
 	// Enemy
 	enemy_ = new Enemy;
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
@@ -153,6 +166,9 @@ void GameScene::Draw() {
 
 	if (player_) {
 		player_->Draw();
+	}
+	for (auto* playerHP : playerHP_) {
+		playerHP->Draw();
 	}
 	if (deathParticles_) {
 		deathParticles_->Draw();
@@ -288,6 +304,16 @@ void GameScene::CurrentPhase() {
 				enemy->Update();
 			}
 		}
+		// Player HP
+		for (auto* playerHP : playerHP_) {
+			playerHP->Update();
+		}
+		for (int i = 0; i < kMaxHp; i++) {
+			if (player_->IsHit()) {
+				playerHP_[player_->GetPlayerHP()]->HpFallMotion();
+				break;
+			}
+		}
 		// Danger Sign
 		dangerSign_->Update();
 		// goal
@@ -335,6 +361,11 @@ void GameScene::CurrentPhase() {
 		if (deathParticles_) { // death particles update
 			deathParticles_->Update();
 		}
+		// Player HP
+		for (auto* playerHP : playerHP_) {
+			playerHP->Update();
+		}
+		playerHP_[0]->HpFallMotion();
 		// Danger Sign
 		dangerSign_->Update();
 		// goal

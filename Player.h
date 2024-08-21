@@ -12,7 +12,6 @@
 #include <imgui.h>
 #include <numbers>
 #include "PlayerHPmodel.h"
-#include "DeathParticles.h"
 
 class MapChipField;
 class Enemy;
@@ -54,14 +53,13 @@ public:
 	// Collision
 	void OnCollision(const Enemy* enemy);
 	void CollisionBuffer();
-	// HP Particles
-	void DrawHpParticles();
 
 	// Getter
 	const WorldTransform& GetWorldTransform() { return worldTransform_; };
 	const Vector3& GetVelocity() const { return velocity_; };
 	const Vector3 GetWorldPosition();
 	const AABB GetAABB();
+	const uint8_t GetPlayerHP() { return hp; }
 	bool IsHit() const { return isHit_; }
 	bool IsDead() const { return isDead_; }
 	// Setter
@@ -109,14 +107,9 @@ private:
 	float turnTimer_ = 0;
 	static inline const float kTimeTurn = 0.3f;
 	// Player HP icon
-	std::vector<PlayerHPmodel*> playerHP_;
-	Model* hpModel_ = nullptr;
-	DeathParticles* deathParticles_ = nullptr;
-	Model* deathParticlesModel_ = nullptr;
-	bool drawHpParticles = false;
-	// Collide with enemy
 	static inline const uint8_t kMaxHp = 5;
 	uint8_t hp = kMaxHp;
+	// Collide with enemy
 	uint8_t collideBuffer = 0;
 	static inline const int kMaxDrawCount = 30;
 	int drawCount = 0;

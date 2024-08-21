@@ -5,13 +5,6 @@
 Player::Player() {}
 
 Player::~Player() {
-	delete hpModel_;
-	for (auto* playerHP : playerHP_) {
-		delete playerHP;
-	}
-	playerHP_.clear();
-	delete deathParticles_;
-	delete deathParticlesModel_;
 }
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, CameraController::Rect movableArea) {
@@ -23,19 +16,6 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vect
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
-
-	hpModel_ = Model::CreateFromOBJ("playerHP");
-	playerHP_.resize(kMaxHp);
-	for (uint8_t i = 0; i < kMaxHp; i++) {
-		playerHP_[i] = new PlayerHPmodel;
-		Vector3 hpPosition = mapChipField_->GetMapChipPositionByIndex(2, 4);
-		hpPosition.x += (i * 3) - 0.5f;
-		hpPosition.y -= 0.8f;
-		playerHP_[i]->Initialize(hpModel_, viewProjection, hpPosition);
-	}
-
-	deathParticles_ = new DeathParticles;
-	deathParticlesModel_ = Model::CreateFromOBJ("deathParticles", true);
 }
 
 void Player::Update() {
@@ -51,11 +31,6 @@ void Player::Update() {
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, movableArea_.bottom, movableArea_.top);
 
 	PlayerDirection();
-
-	for (auto* playerHP : playerHP_) {
-		playerHP->Update();
-	}
-	DrawHpParticles();
 
 	worldTransform_.UpdateMatrix();
 
@@ -75,10 +50,6 @@ void Player::Draw() {
 	}
 	if (isHit_ && drawCount >= 10) {
 		model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
-	}
-
-	for (auto* playerHP : playerHP_) {
-		playerHP->Draw();
 	}
 }
 
@@ -228,11 +199,6 @@ void Player::OnCollision(const Enemy* enemy) {
 	isHit_ = true;
 	if (isHit_ && collideBuffer == 0) {
 		hp--;
-
-		drawHpParticles = true; // true -> to DrawHpParticles Function
-		const Vector3& deathParticlesPosition = playerHP_[hp]->GetWorldTranslation();
-		deathParticles_->Initialize(deathParticlesModel_, viewProjection_, deathParticlesPosition);
-		playerHP_.resize(hp);
 	}
 	if (hp == 0) {
 		isDead_ = true;
@@ -251,16 +217,6 @@ void Player::CollisionBuffer() {
 		isHit_ = false;
 		collideBuffer = 0;
 		drawCount = 0;
-	}
-}
-
-void Player::DrawHpParticles() {
-	if (drawHpParticles) {
-		deathParticles_->Update();
-		deathParticles_->Draw();
-	}
-	if (deathParticles_->IsFinished()) {
-		drawHpParticles = false;
 	}
 }
 
