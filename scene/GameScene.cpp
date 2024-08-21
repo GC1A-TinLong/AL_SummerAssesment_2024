@@ -91,12 +91,15 @@ void GameScene::Initialize() {
 		hpPosition.y -= 0.8f;
 		playerHP_[i]->Initialize(hpModel_, &viewProjection_, hpPosition);
 	}
+	// DangerSign
+	spawnPosition = dangerSign_->SpawnPoint();
+	dangerSign_->Initialize(&viewProjection_, spawnPosition);
 	// Enemy
 	enemy_ = new Enemy;
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(25 + (i * 2), 18 - (i * 2));
+		Vector3 enemyPosition = Vector2ToVector3(spawnPosition);
 		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 
 		enemies_.push_back(newEnemy);
@@ -105,9 +108,6 @@ void GameScene::Initialize() {
 	goalModel_ = Model::CreateFromOBJ("goal", true);
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	goal_->Initialize(goalModel_, &viewProjection_, goalPosition);
-	// DangerSign
-	spawnPosition = dangerSign_->SpawnPoint();
-	dangerSign_->Initialize(&viewProjection_, spawnPosition);
 	// Camera
 	cameraController_ = new CameraController;
 	cameraController_->Initialize(&viewProjection_, cameraMovableArea);

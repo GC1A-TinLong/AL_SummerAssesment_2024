@@ -39,6 +39,13 @@ Vector3 operator*(const Vector3& v, float scalar) {
 	return result;
 }
 
+Vector3 Vector2ToVector3(Vector2& v) {
+	Vector3 result{};
+	result.x = v.x;
+	result.y = v.y;
+	return result;
+}
+
 Vector2Int operator-(const Vector2Int& v1, const Vector2Int& v2) { return {v1.x - v2.x, v1.y - v2.y}; }
 
 float Length(const Vector2Int& v) { return sqrtf(float(v.x * v.x + v.y * v.y)); }
