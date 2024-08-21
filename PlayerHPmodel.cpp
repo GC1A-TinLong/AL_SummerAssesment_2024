@@ -22,7 +22,7 @@ void PlayerHPmodel::HpFallMotion() {
 		isFalling = true;
 	}
 	if (isFalling) {
-		worldTransform_.translation_.y -= 1.f;
+		worldTransform_.translation_.y -= 0.8f;
 		if (worldTransform_.translation_.y >= 750.f) {
 			isFalling = false;
 		}
