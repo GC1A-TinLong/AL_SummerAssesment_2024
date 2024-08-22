@@ -2,7 +2,6 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <algorithm>
-#include <random>
 
 class Player;
 
@@ -15,16 +14,12 @@ public:
 		float top = 1.0f;
 	};
 
-	CameraController() : seed(), eng(seed()), distribution(-randDistance, randDistance) {}
-
 	void Initialize(ViewProjection* viewProjection, Rect movableArea);
-
 	void Update();
+	void Reset();
 
 	void SetTarget(Player* target) { target_ = target; };
 	void SetMovableArea(Rect area) { movableArea_ = area; };
-
-	void Reset();
 
 private:
 	static inline const float kInterpolationRate = 1.0f;
@@ -39,10 +34,4 @@ private:
 	Rect movableArea_ = {0, 100.0f, 0, 100.0f};
 
 	Vector3 targetPosition_ = {};
-
-	float randDistance = 20.f;
-	std::random_device seed; // random device
-	std::default_random_engine eng;
-	std::uniform_real_distribution<float> distribution;
-	Vector2 shakeDistance{};
 };

@@ -11,9 +11,7 @@ void PlayerHPmodel::Initialize(Model* model, ViewProjection* viewProjection, con
 	worldTransform_.translation_ = position;
 }
 
-void PlayerHPmodel::Update() {
-	worldTransform_.UpdateMatrix();
-}
+void PlayerHPmodel::Update() { worldTransform_.UpdateMatrix(); }
 
 void PlayerHPmodel::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
 
@@ -22,8 +20,11 @@ void PlayerHPmodel::HpFallMotion() {
 		isFalling = true;
 	}
 	if (isFalling) {
-		worldTransform_.translation_.y -= 0.8f;
-		if (worldTransform_.translation_.y >= 750.f) {
+		shakeDistance.x = RandomOutput();
+		shakeDistance.y = RandomOutput();
+		worldTransform_.translation_.y -= kFallSpeed;
+		worldTransform_.translation_ += shakeDistance;
+		if (worldTransform_.translation_.y <= -10.f) {
 			isFalling = false;
 		}
 	}

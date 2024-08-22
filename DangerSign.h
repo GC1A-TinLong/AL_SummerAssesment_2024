@@ -11,9 +11,7 @@ public:
 	~DangerSign();
 
 	void Initialize(ViewProjection* viewProjection, const Vector2& position);
-
 	void Update();
-
 	void Draw();
 
 	Vector2 SpawnPoint();
@@ -37,9 +35,9 @@ private:
 		kSpawnPointNum,
 	};
 	SpawnPos spawnPos;
-	Vector2 topLeftPos = {36, 500};
+	Vector2 topLeftPos = {36, 520};
 	Vector2 botLeftPos = {36, 610};
-	Vector2 topRightPos = {1180, 500};
+	Vector2 topRightPos = {1180, 520};
 	Vector2 botRightPos = {1180, 610};
 
 	int randSpawnPoint = 0;
