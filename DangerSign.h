@@ -17,6 +17,7 @@ public:
 	void Draw();
 
 	Vector2 SpawnPoint();
+	const int GetSpawnPoint() const { return randSpawnPoint; }
 
 private:
 	WorldTransform worldTransform_;
@@ -33,7 +34,7 @@ private:
 		topRight,
 		botRight,
 
-		kSpawnPoint,
+		kSpawnPointNum,
 	};
 	SpawnPos spawnPos;
 	Vector2 topLeftPos = {36, 500};

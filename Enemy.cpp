@@ -47,3 +47,28 @@ const AABB Enemy::GetAABB() {
 
 	return aabb;
 }
+
+const Vector3 Enemy::GetSpawnPos(DangerSign* dangerSign) {
+	Vector3 pos{};
+	switch (dangerSign->GetSpawnPoint()) {
+	case 0:
+		spawnPos = SpawnPos::topLeft;
+		pos = topLeftPos;
+		break;
+	case 1:
+		spawnPos = SpawnPos::botLeft;
+		pos = botLeftPos;
+		break;
+	case 2:
+		spawnPos = SpawnPos::topRight;
+		pos = topRightPos;
+		break;
+	case 3:
+		spawnPos = SpawnPos::botRight;
+		pos = botRightPos;
+		break;
+	default:
+		break;
+	}
+	return pos;
+}

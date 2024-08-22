@@ -29,7 +29,7 @@ GameScene::~GameScene() {
 	delete enemyModel_;
 	delete cameraController_;
 	delete goalModel_;
-
+	delete dangerSign_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -92,6 +92,7 @@ void GameScene::Initialize() {
 		playerHP_[i]->Initialize(hpModel_, &viewProjection_, hpPosition);
 	}
 	// DangerSign
+	dangerSign_ = new DangerSign;
 	spawnPosition = dangerSign_->SpawnPoint();
 	dangerSign_->Initialize(&viewProjection_, spawnPosition);
 	// Enemy
@@ -99,7 +100,7 @@ void GameScene::Initialize() {
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
-		Vector3 enemyPosition = Vector2ToVector3(spawnPosition);
+		Vector3 enemyPosition = newEnemy->GetSpawnPos(dangerSign_);	// coordinate is different from danger sign
 		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 
 		enemies_.push_back(newEnemy);

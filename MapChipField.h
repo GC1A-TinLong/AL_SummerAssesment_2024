@@ -56,6 +56,7 @@ public:
 	/// <param name="yIndex"></param>
 	/// <returns></returns>
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+	Vector3 GetMapChipPositionByIndexInt(int xIndex, int yIndex);
 	Vector2 GetMapChipPositionByIndexVector2(uint32_t xIndex, uint32_t yIndex);
 
 	uint32_t GetNumBlockVertical() { return kNumBlockVertical; }

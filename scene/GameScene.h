@@ -132,7 +132,7 @@ private: // メンバ変数
 	std::list<Enemy*> enemies_;
 
 	// DangerSign
-	std::unique_ptr<DangerSign> dangerSign_ = std::make_unique<DangerSign>();
+	DangerSign* dangerSign_ = nullptr;
 
 	// Goal
 	std::unique_ptr<Goal> goal_ = std::make_unique<Goal>();

@@ -4,8 +4,10 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <numbers>
+#include "DangerSign.h"
 
 class Player;
+class DangerSign;
 
 class Enemy {
 public:
@@ -20,6 +22,7 @@ public:
 	// Getter
 	const Vector3 GetWorldPosition();
 	const AABB GetAABB();
+	const Vector3 GetSpawnPos(DangerSign* dangerSign);
 	// Setter
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; };
 
@@ -48,4 +51,18 @@ private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	ViewProjection* viewProjection_ = nullptr;
+
+	enum class SpawnPos {
+		topLeft,
+		botLeft,
+		topRight,
+		botRight,
+
+		kSpawnPointNum,
+	};
+	SpawnPos spawnPos;
+	Vector3 topLeftPos = mapChipField_->GetMapChipPositionByIndexInt(-1, 16);
+	Vector3 botLeftPos = mapChipField_->GetMapChipPositionByIndexInt(-1, 18);
+	Vector3 topRightPos = mapChipField_->GetMapChipPositionByIndexInt(30, 16);
+	Vector3 botRightPos = mapChipField_->GetMapChipPositionByIndexInt(30, 18);
 };

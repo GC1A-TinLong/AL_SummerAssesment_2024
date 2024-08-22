@@ -56,6 +56,7 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex
 }
 
 Vector3 MapChipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) { return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVertical - 1 - yIndex), 0); }
+Vector3 MapChipField::GetMapChipPositionByIndexInt(int xIndex, int yIndex) { return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVertical - 1 - yIndex), 0); }
 Vector2 MapChipField::GetMapChipPositionByIndexVector2(uint32_t xIndex, uint32_t yIndex) { return Vector2(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVertical - 1 - yIndex)); }
 
 IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position) {
