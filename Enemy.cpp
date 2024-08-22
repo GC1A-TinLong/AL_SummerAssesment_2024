@@ -1,15 +1,21 @@
 #include "Enemy.h"
 
-void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
+void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, DangerSign* dangerSign) {
 	assert(model);
 	model_ = model;
 	viewProjection_ = viewProjection;
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f * 3.0f;
 
-	velocity_ = {-kWalkSpeed, 0, 0};
+	SpawningFrom(dangerSign);
+	if (spawnPoint_ == SpawnPoint::kRight) {
+		worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f * 3.0f;
+		velocity_ = {-kWalkSpeed, 0, 0};
+	} else if (spawnPoint_ == SpawnPoint::kLeft) {
+		worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.f;
+		velocity_ = {kWalkSpeed, 0, 0};
+	}
 	walkTimer_ = 0.0f;
 }
 
@@ -28,6 +34,25 @@ void Enemy::Update() {
 void Enemy::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
 
 void Enemy::OnCollision(const Player* player) { (void)player; }
+
+void Enemy::SpawningFrom(DangerSign* dangerSign) {
+	switch (dangerSign->GetSpawnPoint()) {
+	case 0:
+		spawnPoint_ = SpawnPoint::kLeft;
+		break;
+	case 1:
+		spawnPoint_ = SpawnPoint::kLeft;
+		break;
+	case 2:
+		spawnPoint_ = SpawnPoint::kRight;
+		break;
+	case 3:
+		spawnPoint_ = SpawnPoint::kRight;
+		break;
+	default:
+		break;
+	}
+}
 
 const Vector3 Enemy::GetWorldPosition() {
 	Vector3 worldPos{};

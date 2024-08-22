@@ -101,7 +101,7 @@ void GameScene::Initialize() {
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
 		Vector3 enemyPosition = newEnemy->GetSpawnPos(dangerSign_);
-		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
+		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition, dangerSign_);
 
 		enemies_.push_back(newEnemy);
 	}

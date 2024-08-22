@@ -11,13 +11,13 @@ class DangerSign;
 
 class Enemy {
 public:
-	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
-
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, DangerSign* dangerSign);
 	void Update();
-
 	void Draw();
 
 	void OnCollision(const Player* player);
+
+	void SpawningFrom(DangerSign* dangerSign);
 
 	// Getter
 	const Vector3 GetWorldPosition();
@@ -27,7 +27,7 @@ public:
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; };
 
 private:
-	enum class LRDirection {
+	enum class SpawnPoint {
 		kRight,
 		kLeft,
 	};
@@ -36,7 +36,7 @@ private:
 	static inline const float kHeight = 1.8f;
 
 	// Walking speed
-	static inline const float kWalkSpeed = 0.05f;
+	static inline const float kWalkSpeed = 0.1f;
 	static inline const float kInitialWalkMotionAngle = -60.0f; // Initial angle
 	static inline const float kFinalWalkMotionAngle = 120.0f;   // Final angle
 	static inline const float kWalkMotionTime = 1.0f;           // Animation loop time
@@ -46,7 +46,7 @@ private:
 
 	MapChipField* mapChipField_ = nullptr;
 
-	LRDirection lrDirection_ = LRDirection::kLeft;
+	SpawnPoint spawnPoint_ = SpawnPoint::kLeft;
 
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
