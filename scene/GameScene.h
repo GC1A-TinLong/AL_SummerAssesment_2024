@@ -132,7 +132,6 @@ private: // メンバ変数
 	std::list<Enemy*> enemies_;
 
 	// DangerSign
-	//DangerSign* dangerSign_ = nullptr;
 	std::vector<DangerSign*> dangerSign_;
 
 	// Goal

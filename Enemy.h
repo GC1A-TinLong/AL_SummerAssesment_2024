@@ -4,7 +4,6 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <numbers>
-#include "DangerSign.h"
 
 class Player;
 class DangerSign;

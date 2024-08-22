@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "DangerSign.h"
 
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, DangerSign* dangerSign) {
 	assert(model);

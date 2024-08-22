@@ -81,7 +81,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	playerModel_ = Model::CreateFromOBJ("player", true);
 	playerTexture_ = TextureManager::Load("sample.png");
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(14, 18);
 	player_->Initialize(playerModel_, &viewProjection_, playerPosition, playerMovableArea);
 	player_->SetMapChipField(mapChipField_);
 	// Player HP
@@ -101,9 +101,6 @@ void GameScene::Initialize() {
 		spawnPosition = dangerSign_[i]->SpawnPoint();
 		dangerSign_[i]->Initialize(&viewProjection_, spawnPosition);
 	}
-	/*dangerSign_ = new DangerSign;
-	spawnPosition = dangerSign_->SpawnPoint();
-	dangerSign_->Initialize(&viewProjection_, spawnPosition);*/
 	// Enemy
 	enemy_ = new Enemy;
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
