@@ -100,7 +100,7 @@ void GameScene::Initialize() {
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
-		Vector3 enemyPosition = newEnemy->GetSpawnPos(dangerSign_);	// coordinate is different from danger sign
+		Vector3 enemyPosition = newEnemy->GetSpawnPos(dangerSign_);
 		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 
 		enemies_.push_back(newEnemy);
