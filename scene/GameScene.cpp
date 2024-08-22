@@ -29,7 +29,10 @@ GameScene::~GameScene() {
 	delete enemyModel_;
 	delete cameraController_;
 	delete goalModel_;
-	delete dangerSign_;
+	for (auto* dangerSign : dangerSign_) {
+		delete dangerSign;
+	}
+	dangerSign_.clear();
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -92,16 +95,22 @@ void GameScene::Initialize() {
 		playerHP_[i]->Initialize(hpModel_, &viewProjection_, hpPosition);
 	}
 	// DangerSign
-	dangerSign_ = new DangerSign;
+	dangerSign_.resize(kEnemyNum);
+	for (int i = 0; i < kEnemyNum; i++) {
+		dangerSign_[i] = new DangerSign;
+		spawnPosition = dangerSign_[i]->SpawnPoint();
+		dangerSign_[i]->Initialize(&viewProjection_, spawnPosition);
+	}
+	/*dangerSign_ = new DangerSign;
 	spawnPosition = dangerSign_->SpawnPoint();
-	dangerSign_->Initialize(&viewProjection_, spawnPosition);
+	dangerSign_->Initialize(&viewProjection_, spawnPosition);*/
 	// Enemy
 	enemy_ = new Enemy;
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (int32_t i = 0; i < kEnemyNum; i++) {
 		Enemy* newEnemy = new Enemy;
-		Vector3 enemyPosition = newEnemy->GetSpawnPos(dangerSign_);
-		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition, dangerSign_);
+		Vector3 enemyPosition = newEnemy->GetSpawnPos(dangerSign_[i]);
+		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition, dangerSign_[i]);
 
 		enemies_.push_back(newEnemy);
 	}
@@ -119,11 +128,6 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	CurrentPhase();
-	// DangerSign
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		spawnPosition = dangerSign_->SpawnPoint();
-		dangerSign_->Initialize(&viewProjection_, spawnPosition);
-	}
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_F)) {
@@ -211,7 +215,9 @@ void GameScene::Draw() {
 	/// </summary>
 
 	if (phase_ == Phase::kPlay || phase_ == Phase::kDeath) {
-		dangerSign_->Draw();
+		for (auto* dangerSign : dangerSign_) {
+			dangerSign->Draw();
+		}
 	}
 
 	if (fade_) {
@@ -316,7 +322,9 @@ void GameScene::CurrentPhase() {
 			}
 		}
 		// Danger Sign
-		dangerSign_->Update();
+		for (auto* dangerSign : dangerSign_) {
+			dangerSign->Update();
+		}
 		// goal
 		goal_->Update();
 		// camera update
@@ -368,7 +376,9 @@ void GameScene::CurrentPhase() {
 		}
 		playerHP_[0]->HpFallMotion();
 		// Danger Sign
-		dangerSign_->Update();
+		for (auto* dangerSign : dangerSign_) {
+			dangerSign->Update();
+		}
 		// goal
 		goal_->Update();
 		// camera update

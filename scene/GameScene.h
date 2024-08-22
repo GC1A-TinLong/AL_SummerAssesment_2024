@@ -128,11 +128,12 @@ private: // メンバ変数
 	Model* enemyModel_ = nullptr;
 	uint32_t enemyTexture_ = 0u;
 
-	static inline const uint8_t kEnemyNum = 1;
+	static inline const uint8_t kEnemyNum = 2;
 	std::list<Enemy*> enemies_;
 
 	// DangerSign
-	DangerSign* dangerSign_ = nullptr;
+	//DangerSign* dangerSign_ = nullptr;
+	std::vector<DangerSign*> dangerSign_;
 
 	// Goal
 	std::unique_ptr<Goal> goal_ = std::make_unique<Goal>();
