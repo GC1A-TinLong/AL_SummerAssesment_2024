@@ -3,6 +3,7 @@
 #include "DirectXCommon.h"
 #include "GameScene.h"
 #include "ImGuiManager.h"
+#include "Instruction.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include "TitleScene.h"
@@ -11,12 +12,14 @@
 enum class Scene {
 	kUnknown = 0,
 	kTitle,
+	kInstruction,
 	kGame,
 };
 Scene scene = Scene::kUnknown;
 
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
+Instruction* instructionScene = nullptr;
 
 static void ChangeScene() {
 	switch (scene) {
@@ -25,6 +28,19 @@ static void ChangeScene() {
 
 			delete titleScene;
 			titleScene = nullptr;
+
+			// ゲームシーンの初期化
+			instructionScene = new Instruction();
+			instructionScene->Initialize();
+
+			scene = Scene::kInstruction;
+		}
+		break;
+
+	case Scene::kInstruction:
+		if (instructionScene->IsFinished()) {
+			delete instructionScene;
+			instructionScene = nullptr;
 
 			// ゲームシーンの初期化
 			gameScene = new GameScene();
@@ -55,6 +71,9 @@ static void UpdateScene() {
 	case Scene::kTitle:
 		titleScene->Update();
 		break;
+	case Scene::kInstruction:
+		instructionScene->Update();
+		break;
 	case Scene::kGame:
 		gameScene->Update();
 		break;
@@ -65,6 +84,9 @@ static void DrawScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		titleScene->Draw();
+		break;
+	case Scene::kInstruction:
+		instructionScene->Draw();
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
@@ -125,7 +147,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scene = Scene::kTitle;
 	titleScene = new TitleScene;
 	titleScene->Initialize();
-	/*gameScene = new GameScene();
+	/*scene = Scene::kGame;
+	gameScene = new GameScene();
 	gameScene->Initialize();*/
 
 	// メインループ
@@ -167,6 +190,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 各種解放
 	delete gameScene;
 	delete titleScene;
+	delete instructionScene;
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();

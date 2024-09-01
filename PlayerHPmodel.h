@@ -20,6 +20,7 @@ public:
 	float RandomOutput() { return distribution(eng); }
 
 	const Vector3 GetWorldTranslation() const { return worldTransform_.translation_; }
+	bool GetIsFinsihed() const { return isFinished; }
 
 	void HpFallMotion();
 
@@ -29,6 +30,7 @@ private:
 	ViewProjection* viewProjection_ = nullptr;
 
 	bool isFalling = false;
+	bool isFinished = false;
 
 	static inline const float kFallSpeed = 0.5f;
 	float randDistance = kFallSpeed;

@@ -96,10 +96,23 @@ void GameScene::Initialize() {
 	}
 	// DangerSign
 	dangerSign_.resize(kEnemyNum);
+	prevPos.resize(kEnemyNum);
+	spawnPosition.resize(kEnemyNum);
 	for (int i = 0; i < kEnemyNum; i++) {
 		dangerSign_[i] = new DangerSign;
-		spawnPosition = dangerSign_[i]->SpawnPoint();
-		dangerSign_[i]->Initialize(&viewProjection_, spawnPosition);
+		prevPos[i] = {};
+		spawnPosition[i] = dangerSign_[i]->RollSpawnPoint();
+
+		if (i >= 1) {
+			prevPos[i] = dangerSign_[i - 1]->GetPos(); // recording prev pos	(only recording one prev pos, may repeat with past)
+			for (int j = 0; j < kEnemyNum; j++) {
+				spawnPosition[i] = dangerSign_[i]->RollSpawnPoint(); // roll
+				if (spawnPosition[i].x != prevPos[i].x && spawnPosition[i].y != prevPos[i].y) {
+					break;
+				}
+			}
+		}
+		dangerSign_[i]->Initialize(&viewProjection_, spawnPosition[i]);
 	}
 	// Enemy
 	enemy_ = new Enemy;
@@ -166,7 +179,7 @@ void GameScene::Draw() {
 
 	skydome_->Draw();
 
-	if (player_) {
+	if (player_ && !player_->IsDead()) {
 		player_->Draw();
 	}
 	for (auto* playerHP : playerHP_) {
@@ -182,9 +195,9 @@ void GameScene::Draw() {
 		}
 	}
 
-	if (goal_) {
-		goal_->Draw();
-	}
+	/*if (goal_) {
+	    goal_->Draw();
+	}*/
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -261,6 +274,7 @@ void GameScene::CheckAllCollisions() {
 		if (IsCollideAABB(aabb1, aabb2)) {
 			player_->OnCollision(enemy);
 			enemy->OnCollision(player_);
+			break;
 		}
 	}
 	player_->CollisionBuffer();
@@ -305,7 +319,23 @@ void GameScene::CurrentPhase() {
 		player_->Update();  // player update
 		if (enemy_) {       // enemy update
 			for (Enemy* enemy : enemies_) {
-				enemy->Update();
+				int i = 0;
+				prevPos[i] = {};
+				spawnPosition[i] = dangerSign_[i]->RollSpawnPoint();
+
+				if (i >= 1) {
+					prevPos[i] = dangerSign_[i - 1]->GetPos(); // recording prev pos	(only recording one prev pos, may repeat with past)
+					for (int j = 0; j < kEnemyNum; j++) {
+						spawnPosition[i] = dangerSign_[i]->RollSpawnPoint(); // roll
+						if (spawnPosition[i].x != prevPos[i].x && spawnPosition[i].y != prevPos[i].y) {
+							break;
+						}
+					}
+				}
+				Vector3 enemyPos = enemy->GetSpawnPos(dangerSign_[i]);
+				enemy->Update(enemyModel_, &viewProjection_, enemyPos, dangerSign_[i]);
+
+				i++;
 			}
 		}
 		// Player HP
@@ -319,8 +349,8 @@ void GameScene::CurrentPhase() {
 			}
 		}
 		// Danger Sign
-		for (auto* dangerSign : dangerSign_) {
-			dangerSign->Update();
+		for (int i = 0; i < kEnemyNum; i++) {
+			dangerSign_[i]->Update(&viewProjection_, spawnPosition[i]);
 		}
 		// goal
 		goal_->Update();
@@ -345,13 +375,6 @@ void GameScene::CurrentPhase() {
 			deathParticlesModel_ = Model::CreateFromOBJ("deathParticles", true);
 			deathParticles_->Initialize(deathParticlesModel_, &viewProjection_, deathParticlesPosition);
 
-			if (player_) {
-				delete playerModel_;
-				playerModel_ = nullptr;
-				delete player_;
-				player_ = nullptr;
-			}
-
 			phase_ = Phase::kDeath;
 		}
 
@@ -359,53 +382,77 @@ void GameScene::CurrentPhase() {
 
 	case Phase::kDeath:
 		skydome_->Update(); // skydome update
-		if (enemy_) {       //	enemy update
+		if (enemy_) {       // enemy update
 			for (Enemy* enemy : enemies_) {
-				enemy->Update();
-			}
-		}
-		if (deathParticles_) { // death particles update
-			deathParticles_->Update();
-		}
-		// Player HP
-		for (auto* playerHP : playerHP_) {
-			playerHP->Update();
-		}
-		playerHP_[0]->HpFallMotion();
-		// Danger Sign
-		for (auto* dangerSign : dangerSign_) {
-			dangerSign->Update();
-		}
-		// goal
-		goal_->Update();
-		// camera update
-		cameraController_->Update();
-		// block update
-		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-				if (!worldTransformBlock) {
-					continue;
+				int i = 0;
+				prevPos[i] = {};
+				spawnPosition[i] = dangerSign_[i]->RollSpawnPoint();
+
+				if (i >= 1) {
+					prevPos[i] = dangerSign_[i - 1]->GetPos(); // recording prev pos	(only recording one prev pos, may repeat with past)
+					for (int j = 0; j < kEnemyNum; j++) {
+						spawnPosition[i] = dangerSign_[i]->RollSpawnPoint(); // roll
+						if (spawnPosition[i].x != prevPos[i].x && spawnPosition[i].y != prevPos[i].y) {
+							break;
+						}
+					}
 				}
-				worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
-				worldTransformBlock->TransferMatrix();
+				Vector3 enemyPos = enemy->GetSpawnPos(dangerSign_[i]);
+				enemy->Update(enemyModel_, &viewProjection_, enemyPos, dangerSign_[i]);
+
+				i++;
 			}
+			if (deathParticles_) { // death particles update
+				deathParticles_->Update();
+			}
+			// Player HP
+			for (auto* playerHP : playerHP_) {
+				playerHP->Update();
+			}
+			if (!player_->GetIsPressedR()) {
+				playerHP_[0]->HpFallMotion();
+			}
+
+			// Danger Sign
+			for (int i = 0; i < kEnemyNum; i++) {
+				dangerSign_[i]->Update(&viewProjection_, spawnPosition[i]);
+			}
+			// goal
+			goal_->Update();
+			// camera update
+			cameraController_->Update();
+			// block update
+			for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+				for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+					if (!worldTransformBlock) {
+						continue;
+					}
+					worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+					worldTransformBlock->TransferMatrix();
+				}
+			}
+
+			if (deathParticles_ && deathParticles_->IsFinished()) {
+				delete playerModel_;
+				playerModel_ = nullptr;
+				delete player_;
+				player_ = nullptr;
+
+				fade_->Start(Fade::Status::FadeOut, kFadeDuration);
+				fade_->Initialize();
+
+				phase_ = Phase::kFadeOut;
+			}
+
+			break;
+
+		case Phase::kFadeOut:
+			fade_->Update();
+
+			if (fade_->IsFinished()) {
+				isFinished_ = true;
+			}
+			break;
 		}
-
-		if (deathParticles_ && deathParticles_->IsFinished()) {
-			fade_->Start(Fade::Status::FadeOut, kFadeDuration);
-			fade_->Initialize();
-
-			phase_ = Phase::kFadeOut;
-		}
-
-		break;
-
-	case Phase::kFadeOut:
-		fade_->Update();
-
-		if (fade_->IsFinished()) {
-			isFinished_ = true;
-		}
-		break;
 	}
 }

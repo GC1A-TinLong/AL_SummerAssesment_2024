@@ -120,19 +120,20 @@ private: // メンバ変数
 	DeathParticles* deathParticles_ = nullptr;
 	Model* deathParticlesModel_ = nullptr;
 
+	// DangerSign
+	std::vector<DangerSign*> dangerSign_;
+
 	// Spawn
-	Vector2 spawnPosition{};
+	std::vector<Vector2> spawnPosition;
+	std::vector<Vector3> prevPos;
 
 	// Enemy
 	Enemy* enemy_ = nullptr;
 	Model* enemyModel_ = nullptr;
 	uint32_t enemyTexture_ = 0u;
 
-	static inline const uint8_t kEnemyNum = 2;
+	static inline const uint8_t kEnemyNum = 4;
 	std::list<Enemy*> enemies_;
-
-	// DangerSign
-	std::vector<DangerSign*> dangerSign_;
 
 	// Goal
 	std::unique_ptr<Goal> goal_ = std::make_unique<Goal>();

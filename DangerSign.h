@@ -11,11 +11,14 @@ public:
 	~DangerSign();
 
 	void Initialize(ViewProjection* viewProjection, const Vector2& position);
-	void Update();
+	void Update(ViewProjection* viewProjection, const Vector2& position);
 	void Draw();
 
-	Vector2 SpawnPoint();
+	Vector2 RollSpawnPoint();
 	const int GetSpawnPoint() const { return randSpawnPoint; }
+	const Vector3 GetPos() const { return worldTransform_.translation_; }
+
+	void SetIsStart(bool boolean) { isStart = boolean; }
 
 private:
 	WorldTransform worldTransform_;
@@ -42,6 +45,11 @@ private:
 
 	int randSpawnPoint = 0;
 
+	bool isStart = false;
+	int totalDuration = 0;
+
 	static inline const int kMaxDrawCount = 50;
 	int drawCount = 0;
+	static inline const int kMaxDuration = 90;
+	int duration = 0;
 };

@@ -4,8 +4,7 @@
 
 Player::Player() {}
 
-Player::~Player() {
-}
+Player::~Player() {}
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position, CameraController::Rect movableArea) {
 	assert(model);
@@ -53,7 +52,13 @@ void Player::Draw() {
 	}
 }
 
-void Player::PlayerMovement() { MovementInput(); }
+void Player::PlayerMovement() {
+	MovementInput(); 
+	if (Input::GetInstance()->PushKey(DIK_R)) {
+		isDead_ = true;
+		isPressedR = true;
+	}
+}
 
 void Player::MovementInput() {
 	// LR Movement

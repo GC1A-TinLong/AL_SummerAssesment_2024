@@ -18,9 +18,11 @@ void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vecto
 		velocity_ = {kWalkSpeed, 0, 0};
 	}
 	walkTimer_ = 0.0f;
+
+	isStart = true;
 }
 
-void Enemy::Update() {
+void Enemy::Update(Model* model, ViewProjection* viewProjection, const Vector3& position, DangerSign* dangerSign) {
 	worldTransform_.translation_.x += velocity_.x;
 
 	walkTimer_ += 1.0f / 60.0f;
@@ -29,6 +31,14 @@ void Enemy::Update() {
 	float radian = kInitialWalkMotionAngle + (kFinalWalkMotionAngle * (param + 1.0f) / 2.0f);
 	worldTransform_.rotation_.x = (std::numbers::pi_v<float> * radian) / 180.0f;
 
+	if (spawnPoint_ == SpawnPoint::kRight && worldTransform_.translation_.x <= mapChipField_->GetMapChipPositionByIndexInt(-4, 0).x) {
+		Initialize(model, viewProjection, position, dangerSign);
+		dangerSign->SetIsStart(false);
+	}
+	else if (spawnPoint_ == SpawnPoint::kLeft && worldTransform_.translation_.x >= mapChipField_->GetMapChipPositionByIndexInt(33, 0).x) {
+		Initialize(model, viewProjection, position, dangerSign);
+		dangerSign->SetIsStart(false);
+	}
 	worldTransform_.UpdateMatrix();
 }
 

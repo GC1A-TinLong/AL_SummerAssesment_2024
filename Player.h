@@ -62,6 +62,7 @@ public:
 	const uint8_t GetPlayerHP() { return hp; }
 	bool IsHit() const { return isHit_; }
 	bool IsDead() const { return isDead_; }
+	bool GetIsPressedR() const { return isPressedR; }
 	// Setter
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; };
 
@@ -115,4 +116,5 @@ private:
 	int drawCount = 0;
 	bool isHit_ = false;
 	bool isDead_ = false;
+	bool isPressedR = false;
 };

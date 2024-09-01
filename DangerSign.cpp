@@ -14,10 +14,22 @@ void DangerSign::Initialize(ViewProjection* viewProjection, const Vector2& posit
 	worldTransform_.translation_.y = position.y;
 
 	sprite_ = Sprite::Create(texture_, position);
+
+	drawCount = 0;
+	duration = 0;
 }
 
-void DangerSign::Update() {
+void DangerSign::Update(ViewProjection* viewProjection, const Vector2& position) {
+	totalDuration++;
+	if (totalDuration >= 250) {
+		Initialize(viewProjection, position);
+		totalDuration = 0;
+	}
+
 	drawCount++;
+	if (duration < kMaxDuration) {
+		duration++;
+	}
 	if (drawCount >= kMaxDrawCount) {
 		drawCount = 0;
 	}
@@ -25,12 +37,12 @@ void DangerSign::Update() {
 }
 
 void DangerSign::Draw() {
-	if (drawCount <= kMaxDrawCount / 2) {
+	if (drawCount <= kMaxDrawCount / 2 && duration < kMaxDuration) {
 		sprite_->Draw();
 	}
 }
 
-Vector2 DangerSign::SpawnPoint() {
+Vector2 DangerSign::RollSpawnPoint() {
 	randSpawnPoint = randOutput(eng);
 	Vector2 pos{};
 	switch (randSpawnPoint) {

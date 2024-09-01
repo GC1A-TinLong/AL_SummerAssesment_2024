@@ -26,6 +26,7 @@ void PlayerHPmodel::HpFallMotion() {
 		worldTransform_.translation_ += shakeDistance;
 		if (worldTransform_.translation_.y <= -10.f) {
 			isFalling = false;
+			isFinished = true;
 		}
 	}
 }

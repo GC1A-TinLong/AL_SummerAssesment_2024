@@ -1,8 +1,8 @@
 #include "TitleScene.h"
 
-TitleScene::TitleScene() { delete fade_; }
+TitleScene::TitleScene() {}
 
-TitleScene::~TitleScene() {}
+TitleScene::~TitleScene() { delete fade_; }
 
 void TitleScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
